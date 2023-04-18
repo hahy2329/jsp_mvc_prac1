@@ -7,17 +7,14 @@
 <title>session</title>
 </head>
 <body>
-
-<%
+	<%
+		session.invalidate();
+		
+	%>
 	
-	session.invalidate();
-
-%>
-
-<script>
-	alert("로그아웃 되었습니다.");
-	location.href="sessionEx02_02.jsp";
-</script>
-
+	<script>
+		alert("로그아웃 되었습니다.")
+		location.href="sessionEx02_02.jsp";
+	</script>
 </body>
 </html>

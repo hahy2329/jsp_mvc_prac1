@@ -4,18 +4,15 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>session</title>
+<title>Insert title here</title>
 </head>
 <body>
+<%
+	String id = (String)session.getAttribute("id");
+	String role = (String)session.getAttribute("role");
 
-	<h3>마이페이지</h3>
-
-	<%
-		String id = (String)session.getAttribute("id");
-		String role = (String)session.getAttribute("role");
-	
-	%>
-	<p><%=id %>(<%=role %>)님 로그인중</p>
+%>
+<p><%=id %>(<%=role %>)님 로그인중</p>
 
 </body>
 </html>

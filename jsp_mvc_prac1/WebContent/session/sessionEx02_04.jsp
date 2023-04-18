@@ -8,15 +8,14 @@
 </head>
 <body>
 
-<h3>카트리스트</h3>
-<%
-	String id = (String)session.getAttribute("id");
-	String role = (String)session.getAttribute("role");
+	<h3>카트리스트</h3>
 	
+	<%
+		String id = (String)session.getAttribute("id");
+		String role = (String)session.getAttribute("role");
+	%>
 	
-
-%>
-<p><%=id %>(<%=role %>)님 로그인중</p>
+	<p><%=id %>(<%=role %>)님 로그인중</p>
 
 </body>
 </html>

@@ -7,6 +7,7 @@
 <title>delete</title>
 </head>
 <body>
+
 	<form action="04_deletePro.jsp" method="post">
 		<fieldset>
 			<legend>회원탈퇴</legend>
@@ -14,10 +15,7 @@
 			<p>패스워드 : <input type="password" name="passwd"></p>
 			<p><input type="submit" value="탈퇴"></p>
 		</fieldset>
-	
 	</form>
-	
-	
-	
+
 </body>
 </html>

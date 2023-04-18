@@ -8,10 +8,9 @@
 </head>
 <body>
 
-	<h3>카트리스트</h3>
-
 	<%
 		String id = request.getParameter("id");
+	
 	%>
 	
 	<p><%=id %>님 로그인중</p>
