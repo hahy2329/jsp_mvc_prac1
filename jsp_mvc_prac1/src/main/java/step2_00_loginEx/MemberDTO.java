@@ -3,12 +3,11 @@ package step2_00_loginEx;
 import java.util.Date;
 
 public class MemberDTO {
-
 	
 	private String memberId;
 	private String passwd;
 	private String name;
-	private Date joinData;
+	private Date joinDate;
 	
 	
 	public String getMemberId() {
@@ -29,11 +28,11 @@ public class MemberDTO {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Date getJoinData() {
-		return joinData;
+	public Date getJoinDate() {
+		return joinDate;
 	}
-	public void setJoinData(Date joinData) {
-		this.joinData = joinData;
+	public void setJoinDate(Date joinDate) {
+		this.joinDate = joinDate;
 	}
 	
 	
