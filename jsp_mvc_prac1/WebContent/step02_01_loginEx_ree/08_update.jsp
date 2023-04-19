@@ -4,14 +4,20 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>insert</title>
+<title>update</title>
 </head>
 <body>
-	<form action="02_insertPro.jsp" method="post">
+	<%
+		String customerId = (String)session.getAttribute("customerId");
+	
+	%>
+	
+	
+	<form action = "09_updatePro.jsp" method="post">
 		<fieldset>
-			<legend>join</legend>
-			<p>Id : <input type="text" name="customerId"></p>
-			<p>Password : <input type="password" name="passwd"></p>
+			<legend>Update Customer'(<%=customerId %>)'</legend>
+				<p>ID : <input type="text" name="customerId" value="<%=customerId %>" readonly></p>
+				<p>Password : <input type="password" name="passwd"></p>
 			<p>Name : <input type="text" name="name"></p>
 			<p>Address : 
 				<select name="location">
@@ -27,11 +33,11 @@
 				<input type="radio" name="sex" value="남">남
 				<input type="radio" name="sex" value="여">여
 			</p>
-			<p><input type="submit" value="join"></p>	
-				
+			<p><input type="submit" value="update"></p>
 		</fieldset>
-	
+		
 	</form>
+
 
 
 </body>

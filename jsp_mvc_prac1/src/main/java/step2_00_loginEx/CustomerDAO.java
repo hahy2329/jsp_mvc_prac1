@@ -92,4 +92,98 @@ public class CustomerDAO {
 		return isInsert;
 	}
 	
+	public boolean loginCustomer(String customerId, String passwd) {
+		boolean isLogin = false;
+		
+		
+		try {
+			
+			getConnection();
+			
+			pstmt = conn.prepareStatement("SELECT * FROM CUSTOMER WHERE CUSTOMER_ID = ? AND PASSWD = ?");
+			pstmt.setString(1, customerId);
+			pstmt.setString(2, passwd);
+			rs = pstmt.executeQuery();
+			
+			
+			if(rs.next()) {
+				isLogin = true;
+			}
+			
+			
+			}catch(Exception e) {
+			e.printStackTrace();
+			}finally {
+			getClose();
+			}
+		
+		return isLogin;
+		
+	}
+	
+	
+	public boolean deleteCustomer(CustomerDTO customerDTO) {
+		
+		boolean isDelete = false;
+		
+		try {
+			getConnection();
+			
+			pstmt = conn.prepareStatement("SELECT * FROM CUSTOMER WHERE CUSTOMER_ID =? AND PASSWD = ? ");
+			pstmt.setString(1, customerDTO.getCustomerId());
+			pstmt.setString(2, customerDTO.getPasswd());
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()){
+				pstmt = conn.prepareStatement("DELETE FROM CUSTOMER WHERE CUSTOMER_ID = ?");
+				pstmt.setString(1, customerDTO.getCustomerId());
+				pstmt.executeUpdate();
+				isDelete = true;
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			getClose();
+		}
+		
+		return isDelete;
+	}
+	
+	public boolean updateCustomer(CustomerDTO customerDTO) {
+		boolean isUpdate = false;
+		
+		try {
+			
+			getConnection();
+			pstmt = conn.prepareStatement("SELECT * FROM CUSTOMER WHERE CUSTOMER_ID = ? AND PASSWD =?");
+			pstmt.setString(1, customerDTO.getCustomerId());
+			pstmt.setString(2, customerDTO.getPasswd());
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				pstmt = conn.prepareStatement("UPDATE CUSTOMER SET NAME = ?, ADDRESS = ?, SEX = ?  WHERE CUSTOMER_ID = ?");
+				pstmt.setString(1, customerDTO.getName());		
+				pstmt.setString(2, customerDTO.getAddress());		
+				pstmt.setString(3, customerDTO.getSex());		
+				pstmt.setString(4, customerDTO.getCustomerId());		
+				pstmt.executeUpdate();
+				isUpdate = true;
+			}
+			
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			getClose();
+		}
+		
+		return isUpdate;
+		
+		
+		
+	}
+	
+	
+	
+	
 }
