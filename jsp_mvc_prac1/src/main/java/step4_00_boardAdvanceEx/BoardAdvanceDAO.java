@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class BoardAdvanceDAO {
 	
@@ -175,6 +176,45 @@ public class BoardAdvanceDAO {
 		}
 		
 		return boardList;
+		
+	}
+	
+	
+public void setDummy() {
+		
+		Random ran = new Random();
+		
+		try {
+			
+			String[] word = {"가","나","다","라","마","바","사","아","자","차","카","타","파","하"};
+			
+			getConnection();
+			
+			for (int i = 1; i < 201; i++) {
+				String writer  = "";
+				String passwd  = "1111";
+				String subject = "";
+				String content = "";
+				for (int j = 0; j < 7; j++) {
+					writer  += word[ran.nextInt(word.length)];
+					subject += word[ran.nextInt(word.length)];
+					content += word[ran.nextInt(word.length)];
+				}
+				
+				pstmt = conn.prepareStatement("INSERT INTO MAIN_BOARD(WRITER , SUBJECT , CONTENT, PASSWD) VALUES(?, ?, ?, ?)");
+				pstmt.setString(1, writer);
+				pstmt.setString(2, subject);
+				pstmt.setString(3, content);
+				pstmt.setString(4, passwd);
+				pstmt.executeUpdate();
+			
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			getClose();
+		}
 		
 	}
 	

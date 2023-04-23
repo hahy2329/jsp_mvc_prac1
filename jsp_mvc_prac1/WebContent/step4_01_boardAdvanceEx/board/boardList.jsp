@@ -146,13 +146,78 @@
 			</tr>
 		</table>
 		<div style="display: table; margin-left: auto; margin-right: auto">
-		<%
+		<% 
+		if (totalBoardCnt > 0) {
+			
+			// 전체페이지 개수 = 전체게시판 수 / 한페이지에서 보여지는 글수
+			int addPage = totalBoardCnt % onePageViewCnt == 0 ? 0 : 1; // 나머지가 0이면 추가 x , 나머지가 0이 아니면 +1페이지
+			int totalPageCnt = totalBoardCnt / onePageViewCnt + addPage;
+			
+			
+			// 시작페이지
+			int startPage = 1;
+			
+			if (currentPageNumber % 10 == 0) {  
+				startPage = (currentPageNumber / 10 - 1) * 10 + 1;
+					/*
+						currentPage 10 : 1  
+						currentPage 20 : 11  
+						currentPage 30 : 21 
+					*/
+			} 
+			else {
+				startPage = (currentPageNumber / 10) * 10 + 1;							
+				/*
+					currentPage 1  : 1  
+					currentPage 11 : 11  
+					currentPage 21 : 21 
+				*/
+			}
 		
-		
-		
-		
-		%>
-		
+			
+			//끝페이지
+			int endPage = startPage + 9;
+				
+			// 끝페이지가 전체 페이지 개수보다 크다면 
+			if (endPage > totalPageCnt) {
+				endPage = totalPageCnt;
+			}
+			
+			// 게시물이 한페이지에 보여지는 것보다 작다면
+			if (onePageViewCnt > totalBoardCnt) {
+				startPage = 1;
+				endPage = 0;
+			}
+	%>
+			<ul>
+	<% 
+		if (startPage > 10) {
+	%>
+				<li>
+					<a href="boardList.jsp?currentPageNumber=<%=startPage - 10 %>&onePageViewCnt=<%=onePageViewCnt%>&searchKeyword=<%=searchKeyword%>&searchWord=<%=searchWord%>" >이전 </a>
+				</li> 
+	<% 				
+			}	
+	
+			for (int i = startPage; i <= endPage; i++) {
+	%>	
+				<li>
+					<a href="boardList.jsp?currentPageNumber=<%=i %>&onePageViewCnt=<%=onePageViewCnt%>&searchKeyword=<%=searchKeyword%>&searchWord=<%=searchWord%>"><%=i%> &nbsp;</a>
+				</li>
+	<% 				
+			}
+					
+			if (endPage != totalPageCnt && endPage >= 10){
+	%>
+				<li>
+					<a href="boardList.jsp?currentPageNumber=<%=startPage + 10 %>&onePageViewCnt=<%=onePageViewCnt%>&searchKeyword=<%=searchKeyword%>&searchWord=<%=searchWord%>"> 다음 </a>
+				</li> 
+	<% 		
+			}
+		}	
+	%>
+			</ul>
+		</div>
 	</div>
 	
 	
