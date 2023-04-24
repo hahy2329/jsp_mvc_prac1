@@ -215,9 +215,127 @@ public void setDummy() {
 		} finally {
 			getClose();
 		}
+}
+		
+		public MainBoardDTO getBoardDetail(long boardId, boolean isIncreaseReadCnt) {
+			
+			MainBoardDTO mainBoardDTO = new MainBoardDTO();
+			
+			try {
+				getConnection();
+				
+				if(isIncreaseReadCnt) {
+					pstmt = conn.prepareStatement("UPDATE MAIN_BOARD SET READ_CNT = READ_CNT + 1 WHERE BOARD_ID = ?");
+					pstmt.setLong(1, boardId);
+					pstmt.executeUpdate();
+				}
+				pstmt = conn.prepareStatement("SELECT * FROM MAIN_BOARD WHERE BOARD_ID =?");
+				pstmt.setLong(1, boardId);
+				rs = pstmt.executeQuery();
+				
+				if(rs.next()) {
+					mainBoardDTO.setBoardId(rs.getLong("BOARD_ID"));
+					mainBoardDTO.setWriter(rs.getString("WRITER"));
+					mainBoardDTO.setSubject(rs.getString("SUBJECT"));
+					mainBoardDTO.setPasswd(rs.getString("PASSWD"));
+					mainBoardDTO.setEnrollDt(rs.getDate("ENROLL_DT"));
+					mainBoardDTO.setReadCnt(rs.getLong("READ_CNT"));
+					mainBoardDTO.setContent(rs.getString("CONTENT"));
+				}
+			}catch(Exception e) {
+				e.printStackTrace();
+			}finally {
+				getClose();
+			}
+			
+			return mainBoardDTO;
+			
+		
 		
 	}
 	
+	public boolean checkValidMember(MainBoardDTO mainBoardDTO) {
+		boolean isValidMember = false;
+		
+		try {
+			
+			getConnection();
+			pstmt = conn.prepareStatement("SELECT * FROM MAIN_BOARD WHERE BOARD_ID = ? AND PASSWD = ?");
+			pstmt.setLong(1, mainBoardDTO.getBoardId());
+			pstmt.setString(2, mainBoardDTO.getPasswd());
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				isValidMember = true;
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			getClose();
+		}
+		
+		return isValidMember;
+		
+	}
+		
+		
+	public boolean updateBoard(MainBoardDTO mainBoardDTO) {
+		
+		boolean isUpdate = false;
+		
+		try {
+			
+			if(checkValidMember(mainBoardDTO)) {
+				getConnection();
+				pstmt = conn.prepareStatement("UPDATE MAIN_BOARD SET SUBJECT=?, CONTENT=? WHERE BOARD_ID = ? ");
+				pstmt.setString(1, mainBoardDTO.getSubject());
+				pstmt.setString(2, mainBoardDTO.getContent());
+				pstmt.setLong(3, mainBoardDTO.getBoardId());
+				pstmt.executeUpdate();
+				isUpdate = true;
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			getClose();
+		}
+		
+		return isUpdate;
+		
+		
+		
+	}
 	
-	
+	public boolean deleteBoard(MainBoardDTO mainBoardDTO) {
+		System.out.println(mainBoardDTO);
+		
+		boolean isDelete = false;
+		
+		try {
+			
+			
+			
+			if(checkValidMember(mainBoardDTO)) {
+				getConnection();
+				
+				pstmt = conn.prepareStatement("DELETE FROM MAIN_BOARD WHERE BOARD_ID = ?");
+				pstmt.setLong(1, mainBoardDTO.getBoardId());
+				pstmt.executeUpdate();
+				isDelete=true;
+				
+			}
+			
+		
+		
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			getClose();
+		}
+		
+		return isDelete;
+		
+	}
+
+
 }
