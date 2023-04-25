@@ -50,7 +50,7 @@
 					<input type="button" value="수정" onclick="location.href='boardUpdate.jsp?boardId=<%=mainBoardDTO.getBoardId() %>'">
 					<input type="button" value="삭제" onclick="location.href='boardDelete.jsp?boardId=<%=mainBoardDTO.getBoardId() %>'">
 					<input type="button" value="목록보기" onclick="location.href='boardList.jsp'">
-					 
+					<input type="button" value="댓글작성" onclick="location.href='../reply/replyWrite.jsp?boardId=<%=mainBoardDTO.getBoardId()%>'">
 				</td>
 			</tr>
 			

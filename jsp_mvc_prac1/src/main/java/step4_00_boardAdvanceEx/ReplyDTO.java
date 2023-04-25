@@ -8,7 +8,7 @@ public class ReplyDTO {
 	private String content;
 	private String passwd;
 	private Date enrollDt;
-	private long boardDt;
+	private long boardId;
 	
 	public long getReplyId() {
 		return replyId;
@@ -40,11 +40,11 @@ public class ReplyDTO {
 	public void setEnrollDt(Date enrollDt) {
 		this.enrollDt = enrollDt;
 	}
-	public long getBoardDt() {
-		return boardDt;
+	public long getBoardId() {
+		return boardId;
 	}
-	public void setBoardDt(long boardDt) {
-		this.boardDt = boardDt;
+	public void setBoardId(long boardId) {
+		this.boardId = boardId;
 	}
 	
 	

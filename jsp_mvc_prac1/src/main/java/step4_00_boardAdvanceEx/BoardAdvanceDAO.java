@@ -336,6 +336,26 @@ public void setDummy() {
 		return isDelete;
 		
 	}
+	
+	public void insertReply(ReplyDTO replyDTO) {
+		
+		try {
+			
+			getConnection();
+			
+			pstmt = conn.prepareStatement("INSERT INTO REPLY_BOARD(WRITER, CONTENT, PASSWD, BOARD_ID) VALUES(?,?,?,?)");
+			pstmt.setString(1,replyDTO.getWriter());
+			pstmt.setString(2, replyDTO.getContent());
+			pstmt.setString(3, replyDTO.getPasswd());
+			pstmt.setLong(4, replyDTO.getBoardId());
+			pstmt.executeUpdate();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			getClose();
+		}
+		
+	}
 
 
 }
