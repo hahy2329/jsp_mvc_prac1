@@ -1,3 +1,5 @@
+<%@page import="step4_00_boardAdvanceEx.ReplyDTO"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="step4_00_boardAdvanceEx.MainBoardDTO"%>
 <%@page import="step4_00_boardAdvanceEx.BoardAdvanceDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -59,13 +61,38 @@
 		
 		
 		</table>
-	
-	
-	
-	
-	
+		<br>
+		
+		<hr>
+		
+		<br>
+		
+		<h4>댓글 리스트(<%=BoardAdvanceDAO.getInstance().getAllReplyCnt(boardId) %>)</h4>
+		<table style="width:700px;" border="1">
+			<%
+				ArrayList<ReplyDTO> replyList = BoardAdvanceDAO.getInstance().getReplyList(boardId);
+				for(ReplyDTO replyDTO : replyList){
+			
+			%>
+				<tr>
+					<td>
+						작성자 : <%=replyDTO.getWriter() %> / 작성일 : <%=replyDTO.getEnrollDt() %> <br>
+						<%=replyDTO.getContent() %>
+						<input type="button" value="수정" onclick="location.href='../reply/replyUpdate.jsp?replyId=<%=replyDTO.getReplyId()%>'">
+						<input type="button" value="삭제" onclick="location.href='../reply/replyDelete.jsp?replyId=<%=replyDTO.getReplyId()%>'">
+					</td>
+				</tr>
+			
+			<%
+				}
+			
+			%>
+			<tr>
+				<td align="right">
+					<input type="button" value="댓글작성" onclick="location.href='../reply/replyWrite.jsp?boardId=<%=mainBoardDTO.getBoardId() %>'">
+				</td>
+			</tr>
+		</table>
 	</div>
-	
-
 </body>
 </html>

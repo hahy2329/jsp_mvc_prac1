@@ -356,6 +356,66 @@ public void setDummy() {
 		}
 		
 	}
+	
+	public int getAllReplyCnt(long boardId) {
+		int totalReplyCnt = 0;
+		
+		try {
+			getConnection();
+			pstmt = conn.prepareStatement("SELECT COUNT(*) FROM REPLY_BOARD WHERE BOARD_ID =?");
+			pstmt.setLong(1, boardId);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				totalReplyCnt = rs.getInt(1);
+			}
+			
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			getClose();
+		}
+		return totalReplyCnt;
+		
+		
+	}
+	
+	
+	public ArrayList<ReplyDTO> getReplyList(long boardId){
+		ArrayList<ReplyDTO> replyList = new ArrayList<ReplyDTO>();
+		
+		try {
+			getConnection();
+			
+			String sql ="SELECT R.* FROM REPLY_BOARD R ";
+				sql += "JOIN MAIN_BOARD M";
+				sql +="ON M.BOARD_ID = R.BOARD_ID";
+				sql +="AND R.BOARD_ID = ?";
+				sql +="ORDER BY R.ENROLL_DT DESC";
+				
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setLong(1, boardId);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				ReplyDTO replyDTO = new ReplyDTO();
+				replyDTO.setReplyId(rs.getLong("REPLY_ID"));
+				replyDTO.setWriter(rs.getString("WRITER"));
+				replyDTO.setContent(rs.getString("CONTENT"));
+				replyDTO.setPasswd(rs.getString("PASSWD"));
+				replyDTO.setEnrollDt(rs.getDate("ENROLL_DT"));
+				replyDTO.setBoardId(rs.getLong("BOARD_ID"));
+				replyList.add(replyDTO);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			getClose();
+		}
+		
+		return replyList;
+	}
 
 
 }
