@@ -382,23 +382,26 @@ public void setDummy() {
 	}
 	
 	
-	public ArrayList<ReplyDTO> getReplyList(long boardId){
+	public ArrayList<ReplyDTO> getReplyList(long boardId) {
+		 
 		ArrayList<ReplyDTO> replyList = new ArrayList<ReplyDTO>();
 		
 		try {
+
 			getConnection();
+
+			String sql = "SELECT R.* FROM REPLY_BOARD R ";
+				   sql += "JOIN MAIN_BOARD M ";
+				   sql += "ON M.BOARD_ID = R.BOARD_ID ";
+				   sql += "AND R.BOARD_ID = ? ";
+				   sql += "ORDER BY R.ENROLL_DT DESC";
 			
-			String sql ="SELECT R.* FROM REPLY_BOARD R ";
-				sql += "JOIN MAIN_BOARD M";
-				sql +="ON M.BOARD_ID = R.BOARD_ID";
-				sql +="AND R.BOARD_ID = ?";
-				sql +="ORDER BY R.ENROLL_DT DESC";
-				
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setLong(1, boardId);
 			rs = pstmt.executeQuery();
 			
-			if(rs.next()) {
+			while (rs.next()) {
+				
 				ReplyDTO replyDTO = new ReplyDTO();
 				replyDTO.setReplyId(rs.getLong("REPLY_ID"));
 				replyDTO.setWriter(rs.getString("WRITER"));
@@ -407,6 +410,38 @@ public void setDummy() {
 				replyDTO.setEnrollDt(rs.getDate("ENROLL_DT"));
 				replyDTO.setBoardId(rs.getLong("BOARD_ID"));
 				replyList.add(replyDTO);
+				
+			}
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			getClose();
+		}
+		
+		return replyList;
+
+	}
+	
+	public ReplyDTO getReplyDetail(long replyId) {
+		ReplyDTO replyDTO = new ReplyDTO();
+		
+		try {
+			getConnection();
+			
+			pstmt =conn.prepareStatement("SELECT * FROM REPLY_BOARD WHERE REPLY_ID = ?");
+			pstmt.setLong(1, replyId);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				replyDTO.setReplyId(rs.getLong("REPLY_ID"));
+				replyDTO.setWriter(rs.getString("WRITER"));
+				replyDTO.setPasswd(rs.getString("PASSWD"));
+				replyDTO.setEnrollDt(rs.getDate("ENROLL_DT"));
+				replyDTO.setContent(rs.getString("CONTENT"));
+				replyDTO.setBoardId(rs.getLong("BOARD_ID"));
+				
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -414,8 +449,92 @@ public void setDummy() {
 			getClose();
 		}
 		
-		return replyList;
+		return replyDTO;
+		
+		
+		
 	}
-
-
+	
+	public boolean checkValidMember(ReplyDTO replyDTO) {
+		boolean isCheck = false;
+		
+		try {
+			getConnection();
+			
+			pstmt = conn.prepareStatement("SELECT * FROM REPLY_BOARD WHERE REPLY_ID =? AND PASSWD = ? ");
+			pstmt.setLong(1, replyDTO.getReplyId());
+			pstmt.setString(2, replyDTO.getPasswd());
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				isCheck = true;
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			getClose();
+			
+		}
+		
+		return isCheck;
+		
+		
+	}
+	
+	
+	public boolean updateReply(ReplyDTO replyDTO) {
+		boolean isUpdate = false;
+		
+		try {
+			
+			if(checkValidMember(replyDTO)) {
+				getConnection();
+				
+				pstmt = conn.prepareStatement("UPDATE REPLY_BOARD SET CONTENT = ?, ENROLL_DT = NOW() WHERE REPLY_ID = ?");
+				pstmt.setString(1,replyDTO.getContent());
+				pstmt.setLong(2, replyDTO.getReplyId());
+				pstmt.executeUpdate();
+				isUpdate =true;
+				
+			}
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			getClose();
+		}
+		
+		return isUpdate;
+		
+		
+	}
+	
+	public boolean deleteReply(ReplyDTO replyDTO) {
+		boolean isDelete = false;
+		
+		try {
+			
+			if(checkValidMember(replyDTO)) {
+				
+				getConnection();
+				pstmt = conn.prepareStatement("DELETE FROM REPLY_BOARD WHERE REPLY_ID = ? ");
+				pstmt.setLong(1, replyDTO.getReplyId());
+				pstmt.executeUpdate();
+				isDelete = true;
+				
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			getClose();
+		}
+		
+		return isDelete;
+		
+	}
+	
+	
+	
+	
 }
